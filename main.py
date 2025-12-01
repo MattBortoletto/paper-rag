@@ -66,7 +66,10 @@ Answer:
 
 if __name__ == "__main__":
 
+    if not os.path.exists("papers"):
+        raise FileNotFoundError("papers/ directory not found!")
     chroma_dir = "chroma_db"
+    os.makedirs(chroma_dir, exist_ok=True)
     embedding_model_name = "all-minilm"
     llm_name = "qwen3:0.6b"
     context_length = 8192
