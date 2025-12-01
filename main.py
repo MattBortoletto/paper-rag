@@ -83,5 +83,8 @@ if __name__ == "__main__":
     # TODO load an existing DB: vector_db = get_vector_store(embedding_func)
     rag_chain = make_rag_chain(vector_db, llm_name, context_length)
 
+    question = "What is ProToM?"
+    response = rag_chain.invoke(question)
+    print(response)
     
     breakpoint()
