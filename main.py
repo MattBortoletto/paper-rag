@@ -9,6 +9,7 @@ from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
+import gradio
 
 def load_docs(path):
     loader = DirectoryLoader(path, glob="*.pdf", loader_cls=PyPDFLoader)
@@ -63,6 +64,9 @@ Answer:
     )
     return rag_chain
 
+def chat_fn(message, history): 
+    return rag_chain.invoke(message)
+
 
 if __name__ == "__main__":
 
@@ -83,10 +87,19 @@ if __name__ == "__main__":
         persist_directory=chroma_dir
     )
     # TODO load an existing DB: vector_db = get_vector_store(embedding_func)
+    
+    print("Building RAG chain...")
     rag_chain = make_rag_chain(vector_db, llm_name, context_length)
 
-    question = "What is ProToM?"
-    response = rag_chain.invoke(question)
-    print(response)
-    
-    breakpoint()
+    # question = "What is ProToM?"
+    # response = rag_chain.invoke(question)
+    # print(response)
+
+    print("Launching Gradio app...")
+    demo = gradio.ChatInterface(
+        fn=chat_fn,
+        title="PaperChat",
+        description="Ask questions about the PDFs in the ./papers directory.",
+    )
+
+    demo.launch()
