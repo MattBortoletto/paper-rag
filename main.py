@@ -79,7 +79,6 @@ if __name__ == "__main__":
         embedding=embedding_func,
         persist_directory=chroma_dir
     )
-    vector_db.persist() # make sure data is saved 
     # TODO load an existing DB: vector_db = get_vector_store(embedding_func)
     rag_chain = make_rag_chain(vector_db, llm_name, context_length)
 
